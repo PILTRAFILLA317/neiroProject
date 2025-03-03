@@ -2,11 +2,20 @@
 import { fail, redirect } from '@sveltejs/kit'
 import type { Actions, PageServerLoad } from './$types'
 
-export const load: PageServerLoad = async ({ url, locals: { safeGetSession } }) => {
+export const load: PageServerLoad = async ({ url, locals: { supabase, safeGetSession } }) => {
   const { session } = await safeGetSession()
 
   // if the user is already logged in return them to the account page
   if (session) {
+    const { user } = session
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select(`username, full_name, website, avatar_url`)
+      .eq('id', user.id)
+      .single()
+    if (!profile) {
+        redirect(303, '/account/settings')
+    }
     redirect(303, '/account')
   }
 

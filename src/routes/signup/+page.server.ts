@@ -20,12 +20,6 @@ export const actions: Actions = {
     const password = formData.get('password') as string
 
     const { error } = await supabase.auth.signUp({ email, password })
-    // if (error) {
-    //   console.error(error)
-    //   redirect(303, '/auth/error')
-    // } else {
-    //   redirect(303, '/')
-    // }
     if (error) {
       console.error(error)
       return fail(400, {
@@ -34,10 +28,6 @@ export const actions: Actions = {
         message: `There was an issue, Please contact support.`,
       })
     }
-
-    return {
-      success: true,
-      message: 'Please check your email to confirm your account.',
-    }
+    return { success: true, message: `Please check your email for a verification link.` }
   },
 }
