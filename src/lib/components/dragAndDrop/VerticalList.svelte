@@ -4,7 +4,7 @@
 
 	export let className = '';
 	export let itemClassName = '';
-	export let items: { id: number; name: string }[];
+	export let items: { id: number; component: any }[];
 	const flipDurationMs = 300;
 
 	function handleDndConsider(e: CustomEvent) {
@@ -13,8 +13,8 @@
 	function handleDndFinalize(e: CustomEvent) {
 		items = e.detail.items;
 	}
-	function handleClick(e: MouseEvent, item: { id: number; name: string }) {
-		alert(item.name);
+	function handleClick(e: MouseEvent, item: { id: number; component: any }) {
+		alert(item.id);
 	}
 </script>
 
@@ -29,8 +29,12 @@
 	onfinalize={handleDndFinalize}
 >
 	{#each items as item (item.id)}
-		<div onclick="{(e) => handleClick(e, item)}" class={itemClassName} animate:flip={{ duration: flipDurationMs }}>
-			{item.name}
+		<div
+			onclick={(e) => handleClick(e, item)}
+			class={itemClassName}
+			animate:flip={{ duration: flipDurationMs }}
+		>
+			<svelte:component this={item.component} />
 		</div>
 	{/each}
 </section>

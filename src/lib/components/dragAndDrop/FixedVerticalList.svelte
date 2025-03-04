@@ -4,7 +4,7 @@
 
 	export let className = '';
 
-	export let items: { id: number; name: string }[];
+	export let items: { id: number; icon: string; component: any }[];
 	const flipDurationMs = 300;
 	let shouldIgnoreDndEvents = false;
 
@@ -40,7 +40,7 @@
 </script>
 
 <section
-	class="outline-none shadow-none border-none border-gray-300 rounded-lg p-4"
+	class="border-none border-gray-300 rounded-lg p-1"
 	use:dndzone={{
 		items,
 		flipDurationMs,
@@ -52,7 +52,7 @@
 >
 	{#each items as item (item.id)}
 		<div animate:flip={{ duration: flipDurationMs }}>
-			{item.name}
+			<img class="rounded-2xl p-4 w-full" src="{item.icon}" />
 		</div>
 	{/each}
 </section>
