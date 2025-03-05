@@ -9,7 +9,7 @@
 <ul class="menu menu-md bg-base-200 rounded-box max-w-xs w-full">
 	<li>
 		<details open>
-			<summary> Components </summary>
+			<summary> <h1 class="text-xl font-bold">Sections</h1> </summary>
 			<ul>
 				<li>
 					<details open>

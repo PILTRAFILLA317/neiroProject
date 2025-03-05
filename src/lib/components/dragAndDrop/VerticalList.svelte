@@ -3,10 +3,13 @@
 	import { dndzone, TRIGGERS, SHADOW_ITEM_MARKER_PROPERTY_NAME } from 'svelte-dnd-action';
 	import { fade } from 'svelte/transition';
 	import { cubicIn } from 'svelte/easing';
+	import { createEventDispatcher } from 'svelte';
+
+	const dispatch = createEventDispatcher();
 
 	export let className = '';
 	export let itemClassName = '';
-	export let items: { id: number; component: any }[];
+	export let items: { id: number; name: string; component: any, props: any[] }[];
 	const flipDurationMs = 150;
 
 	function handleDndConsider(e: CustomEvent) {
@@ -16,7 +19,7 @@
 		items = e.detail.items;
 	}
 	function handleClick(e: MouseEvent, item: { id: number; component: any }) {
-		alert(item.id);
+		dispatch('itemSelected', item);
 	}
 </script>
 
@@ -44,13 +47,12 @@
 			onclick={(e) => handleClick(e, item)}
 			animate:flip={{ duration: flipDurationMs }}
 		>
-			<svelte:component this={item.component} />
+			<svelte:component this={item.component} props={item.props} />
 			{#if item[SHADOW_ITEM_MARKER_PROPERTY_NAME]}
 				<div
 					in:fade={{ duration: 200, easing: cubicIn }}
 					class="absolute top-0 left-0 right-0 bottom-0 visible border-2 border-gray-200 bg-blue-100 opacity-20 m-0"
-				>
-				</div>
+				></div>
 			{/if}
 		</div>
 	{/each}
