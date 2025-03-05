@@ -1,10 +1,11 @@
 <script lang="ts">
 	import VerticalList from '../../lib/components/dragAndDrop/VerticalList.svelte';
 	import FixedVerticalList from '../../lib/components/dragAndDrop/FixedVerticalList.svelte';
-	import HorizontalList from '../../lib/components/dragAndDrop/HorizontalList.svelte';
+	import ComponentTreeView from '../../lib/components/dragAndDrop/ComponentTreeView.svelte';
 	import Board from '../../lib/components/dragAndDrop/Board.svelte';
-	import TextLeftImageRight from '../../lib/components/webSections/TextLeftImageRight.svelte';
-	// import TextWithImageRightImage from '/static/TextWithImage.png';
+	import TextLeftImageRight from '../../lib/components/webSections/welcomeComponents/TextLeftImageRight.svelte';
+	import TextLeftImageLeft from '../../lib/components/webSections/welcomeComponents/TextLeftImageLeft.svelte';
+	import DefaultNavBar from '../../lib/components/webSections/navBars/DefaultNavBar.svelte';
 
 	import type { PageData } from './$types';
 	import ColorPicker from 'svelte-awesome-color-picker';
@@ -14,16 +15,15 @@
 	let hex = $state('#091319');
 
 	let menuItems = [
-		{ id: 1, name: 'Welcome 1', icon: "/TextWithImage.png", component: TextLeftImageRight }
-		// { id: 22, name: 'Contact Form', icon: '/icons/contact.svg' },
-		// { id: 23, name: 'Gallery', icon: '/icons/gallery.svg' },
-		// { id: 24, name: 'Testimonials', icon: '/icons/testimonials.svg' },
-		// { id: 25, name: 'Footer', icon: '/icons/footer.svg' }
+		{ id: 1, name: 'Image Right', icon: '/TextWithImage.png', component: TextLeftImageRight },
+		{ id: 2, name: 'Image Left', icon: '/TextWithImageLeft.png', component: TextLeftImageLeft }
 	];
 
-	let items = [
-		{ id: 11, name: 'Welcome 1', icon: "/TextWithImage.png", component: TextLeftImageRight }
+	let navBarItems = [
+		{ id: 11, name: 'Default NavBar', icon: '/DefaultNavBar.png', component: DefaultNavBar }
 	];
+
+	let items: any[] = [];
 
 	let { data }: { data: PageData } = $props();
 </script>
@@ -51,19 +51,19 @@
 				<div class="p-5">
 					<h1 class="text-xl font-bold">Sections</h1>
 				</div>
-				<FixedVerticalList className="h-full" items={menuItems} />
+				<ComponentTreeView welcomeItems={menuItems} navBarItems={navBarItems}/>
 			</div>
 		</div>
 		<div class="w-full h-full py-5 pr-5">
 			<div class="mockup-browser border border-base-300 h-full w-full shadow-2xl">
 				<div class="mockup-browser-toolbar">
-					<div class="input w-full">https://daisyui.com</div>
+					<div class="input w-full">https://example.com</div>
 				</div>
 				<div class="bckground h-full" style="background-color: {hex};">
-					<VerticalList itemClassName="" className="h-full" items={items} />
-					<!-- <TextLeftImageRight /> -->
+					<VerticalList itemClassName="" className="overflow-auto h-full" {items} />
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
+
