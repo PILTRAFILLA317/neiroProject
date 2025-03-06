@@ -4,6 +4,8 @@
     themes: sunset --default;
 }
 
+@import "../node_modules/apexcharts/dist/apexcharts.css";
+
 @plugin "daisyui/theme" {
     name: "sunset";
     default: false;
