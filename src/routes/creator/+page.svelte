@@ -2,8 +2,9 @@
 	import VerticalList from '../../lib/components/dragAndDrop/VerticalList.svelte';
 	import ComponentTreeView from '../../lib/components/dragAndDrop/ComponentTreeView.svelte';
 	import TextLeftImageRight from '../../lib/components/webSections/welcomeComponents/TextLeftImageRight.svelte';
-	import TextLeftImageLeft from '../../lib/components/webSections/welcomeComponents/TextLeftImageLeft.svelte';
+	import TextRightImageLeft from '../../lib/components/webSections/welcomeComponents/TextRightImageLeft.svelte';
 	import DefaultNavBar from '../../lib/components/webSections/navBars/DefaultNavBar.svelte';
+	import Inspector from '../../lib/components/Inspector.svelte';
 
 	import type { PageData } from './$types';
 	import { fly } from 'svelte/transition';
@@ -13,7 +14,7 @@
 	let selectedItem: any = $state(null);
 
 	function inspectorClose() {
-		selectedItem = "";
+		selectedItem = null;
 	}
 
 	let menuItems = $state([
@@ -23,21 +24,97 @@
 			icon: '/TextWithImage.png',
 			component: TextLeftImageRight,
 			props: {
-				title: 'Page Title',
-				description:
-					'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum et urna nunc. Mauris posuere dolor tortor.',
+				textColor: '#94a1aa',
+				title: {
+					text: 'Page Title',
+					color: '#94a1aa',
+					size: 32
+				},
+				description: {
+					text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum et urna nunc. Mauris posuere dolor tortor.',
+					color: '#94a1aa',
+					size: 16
+				},
 				imageUrl: '/image.png',
-				button: { width: 128, height: 48, color: '#ff865b', text: 'Call to action' }
+				button: {
+					width: 128,
+					height: 48,
+					round: 48,
+					color: '#ff865b',
+					textColor: '#94a1aa',
+					text: 'Call to action'
+				}
 			}
 		},
-		{ id: 2, name: 'Image Left', icon: '/TextWithImageLeft.png', component: TextLeftImageLeft }
+		{
+			id: 2,
+			name: 'Image Left',
+			icon: '/TextWithImageLeft.png',
+			component: TextRightImageLeft,
+			props: {
+				textColor: '#94a1aa',
+				title: {
+					text: 'Page Title',
+					color: '#94a1aa',
+					size: 32
+				},
+				description: {
+					text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum et urna nunc. Mauris posuere dolor tortor.',
+					color: '#94a1aa',
+					size: 16
+				},
+				imageUrl: '/image.png',
+				button: {
+					width: 128,
+					height: 48,
+					round: 48,
+					color: '#ff865b',
+					textColor: '#94a1aa',
+					text: 'Call to action'
+				}
+			}
+		}
 	]);
 
-	let navBarItems = [
-		{ id: 11, name: 'Default NavBar', icon: '/DefaultNavBar.png', component: DefaultNavBar }
-	];
+	let navBarItems = $state([
+		{
+			id: 11,
+			name: 'Default NavBar',
+			icon: '/DefaultNavBar.png',
+			component: DefaultNavBar,
+			props: {
+				textColor: '#94a1aa',
+				title: {
+					text: 'Page Name',
+					color: '#94a1aa',
+					size: 32
+				},
+				imageUrl: '/image.png',
+				button: {
+					width: 124,
+					height: 36,
+					round: 12,
+					color: '#ff865b',
+					textColor: '#000000',
+					text: 'Call to action'
+				}
+			}
+		}
+	]);
 
-	let items: any[] = [];
+	let items = $state([]);
+	let itemsToSave = $state([]);
+
+
+	async function handleDrop(newItems: any) {
+		console.log('NEW ITEMS', newItems);
+		itemsToSave = newItems;
+		items = newItems; // Asegúrate de que `items` también se actualice
+	}
+
+	async function savePage() {
+		console.log('ITEMS', itemsToSave);
+	}
 
 	let { data }: { data: PageData } = $props();
 </script>
@@ -72,6 +149,30 @@
 				<div class="p-0">
 					<ComponentTreeView welcomeItems={menuItems} {navBarItems} />
 				</div>
+				<div class="divider mx-3"></div>
+				<div class="p-4">
+					<button class="btn btn-accent w-full" onclick={savePage}>
+						<div class="flex flex-row items-center justify-start gap-2">
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-5 w-5"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									stroke-width="2"
+									d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V7m-6 4h6m-6 4h6m-6-8h6m-6 4h6m-6 4h6M3 7l9 5-9 5V7z"
+								/>
+							</svg>
+							<h1 class="text-lg font-semibold tracking-wider text-base-neutral capitalize">
+								Preview
+							</h1>
+						</div>
+					</button>
+				</div>
 			</div>
 		</div>
 		<div class="w-full h-full py-5 pr-5">
@@ -81,9 +182,9 @@
 				</div>
 				<div class="bckground h-full" style="background-color: {hex};">
 					<VerticalList
-						itemClassName=""
 						className="overflow-auto h-full"
 						{items}
+						onDrop={handleDrop}
 						on:itemSelected={(e) => (selectedItem = e.detail)}
 					/>
 				</div>
@@ -91,18 +192,18 @@
 		</div>
 		{#if selectedItem}
 			<div
-				class="w-96 h-full"
+				class="w-96 h-auto"
 				in:fly={{ x: 300, duration: 300 }}
 				out:fly={{ x: 300, duration: 300 }}
 			>
-				<div class="h-full p-5 bg-base-200 rounded-sm">
+				<div class="h-full p-5 bg-base-200 overflow-y-scroll rounded-sm">
 					<div class="flex felx-row justify-between">
 						<h1 class="text-2xl font-semibold tracking-wider text-base-neutral capitalize">
 							Inspector
 						</h1>
-						<button onclick={inspectorClose}>
+						<button onclick={inspectorClose} aria-label="Close inspector">
 							<svg
-								fill="#ffff"
+								fill="#ffffff"
 								width="24"
 								height="24"
 								viewBox="0 0 256 256"
@@ -115,61 +216,7 @@
 							</svg>
 						</button>
 					</div>
-					<h2 class="text-lg font-medium mb-3">{selectedItem.name}</h2>
-					{#each Object.entries(selectedItem.props) as [key, value]}
-						<div class="flex flex-col">
-							{#if key == 'title'}
-								<div>
-									<h2 class="block font-semibold mb-3">Title</h2>
-									<input
-										bind:value={selectedItem.props[key]}
-										type="text"
-										class="input input-accent"
-									/>
-								</div>
-								<div class="divider"></div>
-							{:else if key == 'description'}
-								<div>
-									<h2 class="block font-semibold mb-3">Description</h2>
-									<textarea bind:value={selectedItem.props[key]} class="textarea textarea-accent"
-									></textarea>
-								</div>
-								<div class="divider"></div>
-							{:else if key == 'button'}
-								<div>
-									<h2 class="block font-semibold mb-3">Button</h2>
-									<h3 class="mt-1">Width</h3>
-									<input
-										type="range"
-										min="0"
-										max="500"
-										bind:value={selectedItem.props[key].width}
-										class="range range-xs range-accent"
-									/>
-									<h3 class="mt-1">Height</h3>
-									<input
-										type="range"
-										min="0"
-										max="500"
-										bind:value={selectedItem.props[key].height}
-										class="range range-xs range-accent"
-									/>
-									<h3 class="mt-2">Color</h3>
-									<div class="flex flex-row items-center gap-3">
-										<input
-											type="color"
-											class="rounded-none border-base-content h-8 w-10 block cursor-pointer"
-											id="hs-color-input"
-											title="Choose your color"
-											bind:value={selectedItem.props[key].color}
-										/>
-										<h2>{selectedItem.props[key].color}</h2>
-									</div>
-								</div>
-								<div class="divider"></div>
-							{/if}
-						</div>
-					{/each}
+					<Inspector {selectedItem} />
 				</div>
 			</div>
 		{:else}{/if}

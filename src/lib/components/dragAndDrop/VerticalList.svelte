@@ -8,15 +8,21 @@
 	const dispatch = createEventDispatcher();
 
 	export let className = '';
-	export let itemClassName = '';
-	export let items: { id: number; name: string; component: any, props: any[] }[];
+	export let items: { id: number; name: string; component: any; props: any[] }[];
+	export let onDrop: (items: { id: number; name: string; component: any; props: any[] }[]) => void;
 	const flipDurationMs = 150;
 
 	function handleDndConsider(e: CustomEvent) {
 		items = e.detail.items;
 	}
 	function handleDndFinalize(e: CustomEvent) {
-		items = e.detail.items;
+		// console.log('finalize', e.detail.items[e.detail.items.length - 1]);
+		// items = e.detail.items;
+		const { items: newItems } = e.detail;
+		// optimistic update for smooth UX
+		items = newItems;
+		// sending to top level for saving
+		onDrop([...newItems]);
 	}
 	function handleClick(e: MouseEvent, item: { id: number; component: any }) {
 		dispatch('itemSelected', item);
@@ -31,7 +37,7 @@
 		dropTargetStyle: { outline: '0px' },
 		transformDraggedElement: (element, data, index) => {
 			if (element) {
-				element.style.backgroundColor = '#cccc';
+				element.style.backgroundColor = '#cccccc';
 				element.style.opacity = '0.3';
 				[...element.children].forEach((child) => ((child as HTMLElement).style.display = 'none'));
 				// element.innerHTML = '';

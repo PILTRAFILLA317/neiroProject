@@ -3,6 +3,13 @@
 </script>
 
 <div class="flex flex-col md:flex-row">
+	<div class="md:w-1/2">
+		<img
+			src="https://www.garciafaura.com/wp-content/uploads/2018/11/Colombia-Centro-Empresarial-99-01.jpg"
+			alt="Page Title"
+			class="w-full h-auto"
+		/>
+	</div>
 	<div class="md:w-1/2 flex items-center justify-center">
 		<div class="text-center">
 			<h1 class="text-4xl mb-4 font-bold" style="color: {props.textColor};">{props.title.text}</h1>
@@ -19,12 +26,5 @@
 				{props.button.text}</button
 			>
 		</div>
-	</div>
-	<div class="md:w-1/2">
-		<img
-			src="https://www.garciafaura.com/wp-content/uploads/2018/11/Colombia-Centro-Empresarial-99-01.jpg"
-			alt="Page Title"
-			class="w-full h-auto"
-		/>
 	</div>
 </div>

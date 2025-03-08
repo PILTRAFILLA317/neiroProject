@@ -1,4 +1,5 @@
 <script lang="ts">
+	export let props;
 </script>
 
 <div class="navbar bg-base-100 shadow-sm">
@@ -21,7 +22,7 @@
 				</svg>
 			</div>
 		</div>
-		<a class="btn btn-ghost text-xl">PageName</a>
+		<a class="btn btn-ghost text-xl">{props.title.text}</a>
 	</div>
 	<div class="navbar-center hidden lg:flex">
 		<ul class="menu menu-horizontal px-1">
@@ -30,6 +31,16 @@
 		</ul>
 	</div>
 	<div class="navbar-end">
-		<a class="btn btn-primary">Call to action</a>
+		<button
+			class="btn"
+			style="width:{props.button.width}px;
+                        height:{props.button.height}px;
+                        background-color: {props.button.color};
+						border: none;
+						border-radius: {props.button.round}px;
+						color: {props.button.textColor};"
+		>
+			{props.button.text}</button
+		>
 	</div>
 </div>
